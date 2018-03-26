@@ -1,13 +1,19 @@
 add_custom_target(examples ALL)
 
+find_package(VTK REQUIRED)
+include(${VTK_USE_FILE})
 
 if (BUILD_C_BINDINGS)
     add_executable(flann_example_c flann_example.c)
-    target_link_libraries(flann_example_c flann)
+    target_link_libraries(flann_example_c flann ${VTK_LIBRARIES})
     set_target_properties(flann_example_c PROPERTIES COMPILE_FLAGS -std=c99)
 
-    add_dependencies(examples flann_example_c)
-    install (TARGETS flann_example_c DESTINATION bin )
+
+    add_executable(flann_vs_vtk flann_vs_vtk.cpp)
+    target_link_libraries(flann_vs_vtk flann ${VTK_LIBRARIES})
+
+    add_dependencies(examples flann_vs_vtk)
+    install (TARGETS flann_vs_vtk DESTINATION bin )
 endif()
 
 if (HDF5_FOUND)
